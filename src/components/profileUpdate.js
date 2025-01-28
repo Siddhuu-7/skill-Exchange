@@ -1,86 +1,113 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
+import Done from './Done';
+
 export default function ProfileUpdate() {
   const [profile, setProfile] = useState({
-    fullName: '',
+    userName: '',
     professionalCategory: '',
     location: '',
-    email: '',
-    phone: '',
     summary: '',
+    skills: [],
     experience: [],
-    education: [],
-    skills: []
   });
-
+  const [showSuccess, setShowSuccess] = useState(false);
   const [newExperience, setNewExperience] = useState({
     company: '',
     title: '',
-    startDate: '',
-    endDate: '',
-    currentlyWorking: false
   });
-
   const [newSkill, setNewSkill] = useState('');
 
   const professionalCategories = [
     'Student',
     'Employee',
-    'Teacher/Educator', 
+    'Teacher/Educator',
     'Freelancer',
     'Entrepreneur',
     'Manager',
     'Professional Researcher',
     'Consultant',
-    'Other'
+    'Other',
   ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile(prev => ({
+    setShowSuccess(false);
+    setProfile((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const addExperience = () => {
     if (newExperience.company && newExperience.title) {
-      setProfile(prev => ({
+      setProfile((prev) => ({
         ...prev,
-        experience: [...prev.experience, newExperience]
+        experience: [...prev.experience, newExperience],
       }));
       setNewExperience({
         company: '',
         title: '',
-        startDate: '',
-        endDate: '',
-        currentlyWorking: false
       });
     }
   };
 
   const addSkill = () => {
     if (newSkill && !profile.skills.includes(newSkill)) {
-      setProfile(prev => ({
+      setProfile((prev) => ({
         ...prev,
-        skills: [...prev.skills, newSkill]
+        skills: [...prev.skills, newSkill],
       }));
       setNewSkill('');
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Profile Submitted:', profile);
+  const removeSkill = (index) => {
+    setProfile((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index),
+    }));
   };
 
+  const removeExperience = (index) => {
+    setProfile((prev) => ({
+      ...prev,
+      experience: prev.experience.filter((_, i) => i !== index),
+    }));
+  };
 
-  const FetchData=()=>{
-    const id=localStorage.getItem('Id')
-    axios.get(`http://localhosy:5000/user/profileData/${id}`)
-    .then(res)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const id = localStorage.getItem('Id');
+     await axios.post('http://localhost:5000/user/profileDataUpdate', { id, profile });
+    setShowSuccess(!showSuccess);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const id = localStorage.getItem('Id');
+      try {
+        const res = await axios.get(`http://localhost:5000/user/profileData/${id}`);
+        const data = res.data;
+
+        setProfile({
+          userName: data.userName.charAt(0).toUpperCase() + data.userName.slice(1) || '',
+          professionalCategory: data.professionalCategory || '',
+          location: data.location.charAt(0).toUpperCase() + data.location.slice(1) || '',
+          email: data.email || '',
+          summary: data.summary || '',
+          skills: data.skills || [],
+          experience: data.experience || [],
+        });
+      } catch (err) {
+        console.error('Error fetching profile data:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
@@ -91,24 +118,23 @@ export default function ProfileUpdate() {
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
-                {/* Personal Info Section */}
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label className="form-label">Full Name</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      name="fullName"
-                      value={profile.fullName}
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="userName"
+                      value={profile.userName}
                       onChange={handleChange}
                       placeholder="Your full name"
-                      required 
+                      required
                     />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Professional Category</label>
-                    <select 
-                      className="form-select" 
+                    <select
+                      className="form-select"
                       name="professionalCategory"
                       value={profile.professionalCategory}
                       onChange={handleChange}
@@ -124,106 +150,58 @@ export default function ProfileUpdate() {
                   </div>
                 </div>
 
-                {/* Contact & Location */}
                 <div className="row mb-3">
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <label className="form-label">Location</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
+                    <input
+                      type="text"
+                      className="form-control"
                       name="location"
                       value={profile.location}
                       onChange={handleChange}
-                      placeholder="City, Country" 
+                      placeholder="City, Country"
                     />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <label className="form-label">Email</label>
-                    <input 
-                      type="email" 
-                      className="form-control" 
+                    <input
+                      type="email"
+                      className="form-control"
                       name="email"
                       value={profile.email}
-                      onChange={handleChange}
-                      placeholder="Professional email" 
+                      disabled={true}
+                      placeholder="Professional email"
+                      required
                     />
                   </div>
-
                 </div>
 
-                {/* Professional Summary */}
                 <div className="mb-3">
                   <label className="form-label">Professional Summary</label>
-                  <textarea 
-                    className="form-control" 
+                  <textarea
+                    className="form-control"
                     name="summary"
                     value={profile.summary}
                     onChange={handleChange}
                     placeholder="Write a brief professional summary"
-                    rows="4" 
+                    rows="4"
                   />
-                </div>
-
-                {/* Experience Section */}
-                <div className="mb-3">
-                  <h4>Work Experience</h4>
-                  {profile.experience.map((exp, index) => (
-                    <div key={index} className="card mb-2">
-                      <div className="card-body">
-                        <h5 className="card-title">{exp.title} at {exp.company}</h5>
-                        <p className="card-text">{exp.startDate} - {exp.endDate}</p>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="row">
-                    <div className="col-md-4">
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        placeholder="Company"
-                        value={newExperience.company}
-                        onChange={(e) => setNewExperience(prev => ({...prev, company: e.target.value}))}
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        placeholder="Job Title"
-                        value={newExperience.title}
-                        onChange={(e) => setNewExperience(prev => ({...prev, title: e.target.value}))}
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <button 
-                        type="button" 
-                        className="btn btn-primary" 
-                        onClick={addExperience}
-                      >
-                        Add Experience
-                      </button>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="mb-3">
                   <h4>Skills</h4>
                   <div className="row mb-3">
                     <div className="col-md-8">
-                      <input 
-                        type="text" 
-                        className="form-control" 
+                      <input
+                        type="text"
+                        className="form-control"
                         placeholder="Add a skill"
                         value={newSkill}
                         onChange={(e) => setNewSkill(e.target.value)}
                       />
                     </div>
                     <div className="col-md-4">
-                      <button 
-                        type="button" 
-                        className="btn btn-primary" 
-                        onClick={addSkill}
-                      >
+                      <button type="button" className="btn btn-primary" onClick={addSkill}>
                         Add Skill
                       </button>
                     </div>
@@ -232,11 +210,65 @@ export default function ProfileUpdate() {
                     {profile.skills.map((skill, index) => (
                       <span key={index} className="badge bg-secondary me-2 mb-2">
                         {skill}
+                        <button
+                          className="btn btn-sm btn-danger ms-2"
+                          onClick={() => removeSkill(index)}
+                        >
+                          X
+                        </button>
                       </span>
                     ))}
                   </div>
                 </div>
 
+                <div className="mb-3">
+                  <h4>Work Experience or Project</h4>
+                  {profile.experience.map((exp, index) => (
+                    <div key={index} className="card mb-2">
+                      <div className="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                          <h5 className="card-title">{exp.title} at {exp.company}</h5>
+                        </div>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => removeExperience(index)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="row">
+                    <div className="col-md-4">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Role"
+                        value={newExperience.company}
+                        onChange={(e) =>
+                          setNewExperience((prev) => ({ ...prev, company: e.target.value }))
+                        }
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Title"
+                        value={newExperience.title}
+                        onChange={(e) =>
+                          setNewExperience((prev) => ({ ...prev, title: e.target.value }))
+                        }
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <button type="button" className="btn btn-primary" onClick={addExperience}>
+                        Add Experience
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                {showSuccess && <Done />}
                 <button type="submit" className="btn btn-success w-100">
                   Update Profile
                 </button>

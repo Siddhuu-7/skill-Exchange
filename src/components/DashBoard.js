@@ -1,78 +1,69 @@
-import React, { useState } from 'react';
-import Searchbar from './searchbar';
+import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import PostsCard from './PostsCrad';
-import PostData from '../setupTests';
+import FooterNavbar from './Fotter';
+import axios from 'axios';
+import SearchBar from './searchbar';
 
 export default function DashBoard() {
-  const [showSearchbar, setShowSearchbar] = useState(false); 
-  const [searchedcontent,setSearchContent]=useState('')
-
-  const toggleSearchbar = () => {
-    setShowSearchbar(prevState => !prevState);
+  const [PostData, setPostData] = useState([]);
+  const [accepted,setaccepted]=useState([])
+const my_id=localStorage.getItem('Id')
+  const handleFetchAllData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/user/get-all-data');
+      const mergedData = response.data;
+      setPostData(mergedData);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
   };
-const hadlesearch= async(search)=>{
- await setSearchContent(search)
-console.log("search",searchedcontent)
+const handelAccpetedRequests=async(requester)=>{
+  const recipient=my_id
+try {
+  const res=await axios.post('http://localhost:5000/get-accepted-request',{
+        recipient,
+        requester
+        
+});
+
+setaccepted(res.data)
+} catch (error) {
+  console.log(error)
+}  
 }
+  useEffect(() => {
+    handleFetchAllData();
+    handelAccpetedRequests("6798cb01e06b53a7354f5258");
+  }, []);
+
   return (
     <div>
-      
-      <div className='fixed-top pb-2'>
-        <Navbar toggleSearchbar={toggleSearchbar} />
+      <div className="fixed-top" style={{ zIndex: 1030 }}>
+        <Navbar />
       </div>
 
-      <div style={{ marginTop: '60px' }}>
-        
-        
-        {showSearchbar && (
-          <div
-            style={{
-              position: 'fixed',
-              top: '0',
-              left: '0',
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: '9999',
-            }}
-            onClick={() => setShowSearchbar(false)} 
-          >
-            <div
-              className="card p-3 shadow-lg text-center bg-info"
-              style={{
-                maxWidth: '1200px',
-                borderRadius: '12px',
-                backgroundColor: '#90CAF9',
-                padding: '20px',
-                zIndex: '10000', 
-                width:"80%"
-              }}
-              onClick={(e) => e.stopPropagation()} 
-            >
-              <Searchbar hadlesearch={hadlesearch} />
-            </div>
-          </div>
-        )}
-
-        <div
-          className="d-flex flex-wrap justify-content-center mt-4"
-          style={{
-            overflowY: 'auto',
-            padding: '10px',
-            width: '100%',
-            borderRadius: '12px',
-            border: '1px solid #ccc',
-          }}
-        >
-          {PostData.map((data, index) => (
-            <PostsCard key={index} PostData={data} />
-          ))}
-        </div>
+      <div className="fixed-top" style={{ top: '70px', zIndex: 1020, padding: '10px 20px' }}>
+        <SearchBar />
       </div>
+
+      <div
+        className="d-flex flex-wrap justify-content-center"
+        style={{
+          marginTop: '160px', 
+          padding: '20px', 
+          width: '100%',
+          borderRadius: '12px',
+          border: '1px solid #ccc',
+        }}
+      >
+       {PostData.map((data, index) => (
+  data._id !== my_id && <PostsCard key={index} PostData={data} />
+))}
+
+      </div>
+
+      <FooterNavbar />
     </div>
   );
 }

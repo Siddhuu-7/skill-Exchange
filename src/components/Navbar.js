@@ -1,16 +1,19 @@
-import React from 'react';
-import { User,MessageCircleMore, Search } from 'lucide-react'; 
+import React, { useState } from 'react';
+import { User, MessageCircleMore, Filter, X } from 'lucide-react';
 import Logo from '../assests/logo.png';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-export default function Navbar({toggleSearchbar}) {
+export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-     
+        {/* Logo */}
+        <Link to="/" className="navbar-brand">
+          <img src={Logo} alt="Logo" style={{ height: '60px', width: '120px' }} />
+        </Link>
 
-        
+        {/* Collapse Button */}
         <button
           className="navbar-toggler"
           type="button"
@@ -19,51 +22,27 @@ export default function Navbar({toggleSearchbar}) {
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          style={{ border: "none", background: "none" }}
         >
-          <img src={Logo}
-           alt="Toggle Menu"
-           style={{ height: '60px', width: '120px' }} 
-           />
+          <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
+        {/* Collapsible Links - Align from right */}
+        <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul className="navbar-nav d-flex flex-row gap-4">
             <li className="nav-item">
-              <p className="nav-link active" title="Home" onClick={toggleSearchbar}>
-                <Search size={24}/>
-              </p>
-            </li>
-            <li className="nav-item">
-              <Link to={'/posts'}> <p className="nav-link active"  title="Home">
-                Posts
-              </p></Link>
-            </li>
-            <li className="nav-item">
-              <Link to={'/mydashboard'}>
-              <p className="nav-link"  title="Dashboard">
-                My Dashboard
-              </p></Link>
-            </li>
-            <li className="nav-item">
-              <p className="nav-link"  title="FAQs">
+              <Link to="/faqs" className="nav-link" title="FAQs">
                 FAQs
-              </p>
+              </Link>
             </li>
             <li className="nav-item">
-              <Link to='profile'  >
-              <p className="nav-link"  title="Account">
+              <Link to="/profile" className="nav-link" title="Account">
                 <User size={24} />
-              </p>
               </Link>
             </li>
             <li className="nav-item">
-              <Link to={'/message'}>
-              <p className="nav-link"  title="Message Box">
+              <Link to="/message" className="nav-link" title="Message Box">
                 <MessageCircleMore size={24} />
-              </p>
               </Link>
-              
             </li>
           </ul>
         </div>

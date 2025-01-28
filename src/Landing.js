@@ -18,7 +18,7 @@ const SkillExchangeLanding = () => {
       
       <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div className="container">
-          <a className="navbar-brand fw-bold text-primary" href="/">Skill Exchange</a>
+          <p className="navbar-brand fw-bold text-primary" >Skill Exchange</p>
           <div className="ms-auto">
             <button className="btn btn-primary d-flex align-items-center" 
             onClick={()=>{

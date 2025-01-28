@@ -22,7 +22,6 @@ const ProfilePage = () => {
       try {
         const response = await axios.get(`http://localhost:5000/user/profileData/${id}`);
         setProfileData(response.data);
-        console.log(response.data)
       } catch (err) {
         setError("Failed to fetch profile data. Please try again later.");
       } finally {
@@ -62,46 +61,43 @@ const ProfilePage = () => {
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
-        <div className="col-lg-8">
+        <div className="col-lg-10">
           <div className="card shadow-sm">
             <div className="card-header bg-primary text-white text-center">
-              <div className="d-flex align-items-center">
+              <div className="d-flex flex-column align-items-center">
                 <img
-                  src={"https://m.economictimes.com/thumb/msid-117556047,width-1200,height-900,resizemode-4,imgsize-1289830/republic-day.jpg"}
+                  src={"https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg"}
                   alt="Profile"
-                  className="rounded-circle me-3"
-                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                  className="rounded-circle mb-3"
+                  style={{ width: '120px', height: '120px', objectFit: 'cover' }}
                 />
-                <div>
-                  <h2 className="mb-0">{profileData.userName || 'No Name Provided'}</h2>
-                  <p className="mb-0">{profileData.professionalCategory || 'No Category Provided'}</p>
-                </div>
+                <h2 className="mb-1">{profileData.userName || 'No Name Provided'}</h2>
+                <p className="mb-0">{profileData.professionalCategory || 'No Category Provided'}</p>
               </div>
             </div>
             <div className="card-body">
               {/* Contact Information */}
               <div className="row mb-4">
-                <div className="col-md-4">
-                  <strong><FaMapMarkerAlt /> Location:</strong> {profileData.location || 'No Location Provided'}
+                <div className="col-md-6">
+                  <strong><FaMapMarkerAlt className="me-2" />Location:</strong> {profileData.location || 'No Location Provided'}
                 </div>
-                <div className="col-md-4">
-                  <strong><FaEnvelope /> Email:</strong> {profileData.email || 'No Email Provided'}
+                <div className="col-md-6">
+                  <strong><FaEnvelope className="me-2" />Email:</strong> {profileData.email || 'No Email Provided'}
                 </div>
-                
               </div>
 
               {/* Professional Summary */}
               <div className="mb-4">
-                <h4>Professional Summary</h4>
+                <h4 className="border-bottom pb-2">Professional Summary</h4>
                 <p>{profileData.summary || 'No Summary Available'}</p>
               </div>
 
               {/* Work Experience */}
               <div className="mb-4">
-                <h4>Work Experience</h4>
+                <h4 className="border-bottom pb-2">Work Experience</h4>
                 {profileData.experience && profileData.experience.length > 0 ? (
                   profileData.experience.map((job, index) => (
-                    <div key={index} className="card mb-2">
+                    <div key={index} className="card mb-3">
                       <div className="card-body">
                         <h5 className="card-title">{job.title} at {job.company}</h5>
                         <p className="card-text">
@@ -115,28 +111,9 @@ const ProfilePage = () => {
                 )}
               </div>
 
-              {/* Education */}
-              <div className="mb-4">
-                <h4>Education</h4>
-                {profileData.education && profileData.education.length > 0 ? (
-                  profileData.education.map((edu, index) => (
-                    <div key={index} className="card mb-2">
-                      <div className="card-body">
-                        <h5 className="card-title">{edu.degree}</h5>
-                        <p className="card-text">
-                          {edu.school} | {edu.startYear} - {edu.endYear}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No education details provided.</p>
-                )}
-              </div>
-
               {/* Skills */}
               <div>
-                <h4>Skills</h4>
+                <h4 className="border-bottom pb-2">Skills</h4>
                 <div>
                   {profileData.skills && profileData.skills.length > 0 ? (
                     profileData.skills.map((skill, index) => (
@@ -153,7 +130,7 @@ const ProfilePage = () => {
               {/* Edit Profile Button */}
               <div className="d-flex justify-content-end mt-4">
                 <button className="btn btn-outline-primary" onClick={() => navigate('/profileupdate')}>
-                  <FaEdit /> Edit Profile
+                  <FaEdit className="me-2" /> Edit Profile
                 </button>
               </div>
             </div>

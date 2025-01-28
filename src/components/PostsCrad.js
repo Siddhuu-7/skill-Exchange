@@ -1,130 +1,131 @@
-import React from 'react';
-
+import axios from 'axios';
+import { Blend } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export default function PostsCard({ PostData }) {
-  const firstLetter = PostData.name.charAt(0).toUpperCase();
-
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
+  const navigate = useNavigate();
+  const [clickedconnect,setConnect]=useState(false)
   
-  const randomColor = getRandomColor();
+  const firstLetter = PostData.userName.charAt(0).toUpperCase();
+  const getColorFromString = (str) => {
+    const colors = [
+      '#0d6efd', 
+      '#198754', 
+      '#6f42c1', 
+      '#d63384', 
+      '#0dcaf0',
+      '#20c997', 
+      '#6610f2'  
+    ];
+    const index = str.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return colors[index % colors.length];
+  };
+  const handelConnect=async()=>{
+    const requester=localStorage.getItem('Id');
+    setConnect(!clickedconnect)
+    const recipient=PostData._id;
 
+    await axios.post(`http://localhost:5000/request`,{requester,recipient,status:"pending"})
+  }
+  const handelPending= async()=>{
+    const requester=localStorage.getItem('Id');
+    setConnect(!clickedconnect)
+    const recipient=PostData._id;
+
+    await axios.post(`http://localhost:5000//request`,{requester,recipient,status:"cancelled"})
+  }
+  const avatarColor = getColorFromString(PostData.userName);
   return (
-    <div
-      className="card p-3 mb-4"
-      style={{
-        border: "1px solid black",
-        borderRadius: "10px",
-        maxWidth: "300px", 
-        height: "auto",
-        overflow: "hidden", 
-        marginBottom:"20px",
-        marginRight:"10px",
-        marginTop:"10px"
-      }}
-    >
-      <div className="d-flex align-items-center mb-3">
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{
-            width: "40px",
-            height: "40px",
-            borderRadius: "50%",
-            backgroundColor: randomColor,
-            color: "#fff",
-            fontWeight: "bold",
-            fontSize: "18px",
-          }}
-        >
-          {firstLetter}
+    <div className="card shadow-sm h-100" style={{ maxWidth: '24rem' }}>
+      <div className="card-body">
+        <div className="d-flex align-items-center mb-3">
+          <div
+            className="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+            style={{
+              width: '48px',
+              height: '48px',
+              backgroundColor: avatarColor,
+              color: 'white',
+              fontSize: '1.25rem',
+              fontWeight: '600'
+            }}
+          >
+            {firstLetter}
+          </div>
+          <div className="ms-3 overflow-hidden">
+            <h5 className="card-title mb-0 text-truncate">
+              {PostData.userName}
+            </h5>
+            {PostData.summary && (
+              <p className="card-text small text-muted text-truncate mb-0">
+                {PostData.summary}
+              </p>
+            )}
+          </div>
         </div>
-        <p
-          className="ms-2 mb-0"
-          style={{
-            whiteSpace: "nowrap", 
-            overflow: "hidden", 
-            textOverflow: "ellipsis", 
-            maxWidth: "calc(100% - 50px)", 
-          }}
-        >
-          {PostData.name}
-        </p>
-      </div>
-      <p
-        style={{
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis", 
-        }}
-      >
-        <strong>Bio:</strong> {PostData.Bio}
-      </p>
-      <p style={{ display: "flex", alignItems: "center" }}>
-  <strong>Total Teaches:</strong>
-  <span
-    style={{
-      marginLeft: "10px",
-      display: "inline-flex",
-      justifyContent: "center",
-      alignItems: "center",
-      width: "30px", 
-      height: "30px", 
-      borderRadius: "50%", 
-      backgroundColor: "gray", 
-      color: "#fff", 
-      fontWeight: "bold", 
-      fontSize: "14px", 
-    }}
-  >
-    {PostData.TotalTeaches}
-  </span>
-</p>
 
-      <div>
-        <strong>Skills:</strong>
-        <ul
-          style={{
-            maxHeight: "100px", 
-            overflowY: "auto", 
-            paddingLeft: "20px", 
-          }}
-        >
-          {PostData.Skills.map((skill, index) => (
-            <li key={index} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {skill}
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className="mb-3">
+          <div className="d-flex align-items-center">
+            <i className="bi bi-person me-2"></i>
+            <span className="fw-semibold">Total Teaches</span>
+            <span className="ms-2 badge rounded-pill bg-light text-dark">
+              {PostData.TotalTeaches || Math.floor(Math.random()*10)}
+            </span>
+          </div>
+        </div>
 
-      <div className="d-flex justify-content-between mt-3">
-        <button
-          className="btn text-white"
-          style={{
-            backgroundColor: "black",
-            padding: "10px 20px",
-            width: "48%",
-          }}
-        >
-          Connect
-        </button>
-        <button
-          className="btn"
-          style={{
-            backgroundColor: "transparent",
-            padding: "10px 20px",
-            width: "48%",
-            border: "1px solid #007bff",
-            color: "#007bff",
-          }}
-        >
-          Profile
-        </button>
+        <div className="mb-3">
+          <div className="d-flex align-items-center mb-2">
+            <i className="bi bi-book me-2"></i>
+            <span className="fw-semibold">Skills</span>
+          </div>
+          <div 
+            className="d-flex flex-wrap gap-2"
+            style={{ maxHeight: '100px', overflowY: 'auto' }}
+          >
+            {PostData.skills.map((skill, index) => (
+              <span
+                key={index}
+                className="badge rounded-pill"
+                style={{ 
+                  backgroundColor: 'rgba(13, 110, 253, 0.1)', 
+                  color: '#0d6efd',
+                  fontSize: '0.875rem',
+                  fontWeight: '500'
+                }}
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="d-flex gap-2 mt-auto pt-3">
+          {
+            clickedconnect?<button className="btn  flex-grow-1 d-flex align-items-center justify-content-center gap-2"
+            style={{backgroundColor:clickedconnect?"black":"#1e90ff", color:"white"}}
+            onClick={()=>{
+              handelPending();
+            }}
+            >
+              <i className="bi bi-chat"></i>
+              pending
+            </button>:<button className="btn  flex-grow-1 d-flex align-items-center justify-content-center gap-2"
+          style={{backgroundColor:clickedconnect?"black":"#1e90ff", color:"white"}}
+          onClick={handelConnect}
+          >
+            <i className="bi bi-chat"></i>
+            connect
+
+          </button>
+          }
+          <button
+            onClick={() => navigate(`/publicprofile/${PostData._id}`)}
+            className="btn btn-outline-primary flex-grow-1"
+          >
+            View Profile
+          </button>
+        </div>
       </div>
     </div>
   );

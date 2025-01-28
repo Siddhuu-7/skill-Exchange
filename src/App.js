@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.css';
 import Landing from './Landing';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import LearnMore from './LearnMore'
 import SignupPage from './components/SignUp';
@@ -13,6 +13,8 @@ import Request from './components/Request';
 import MyDashBoard from './components/MyDashBoard';
 import Posts from './components/Posts';
 import ProfileUpdate from './components/profileUpdate';
+import FAQs from './components/Faqs';
+import PublicProfilePage from './components/PublicProfile';
 export default function App() {
 
   const [initial,setIntial]=useState(false)
@@ -30,7 +32,7 @@ useEffect(()=>{
     <BrowserRouter>
       <Routes>
         <Route path='*' element={<PageNotFound/>}/>
-        <Route path='/' element={initial?<DashBoard/>:<Landing/>} />
+        <Route path='/' element={initial ? <DashBoard/>:<Landing/>} />
         <Route path='/landing' element={<Landing/>} />
         <Route path='/learnmore' element={<LearnMore/>}/>
         <Route path='/login' element={<Login/>}/>
@@ -42,6 +44,8 @@ useEffect(()=>{
         <Route path='/mydashboard' element={<MyDashBoard/>}/>
         <Route path='/posts' element={<Posts/>}/>
         <Route path='/profileupdate' element={<ProfileUpdate/>}/>
+        <Route path='/faqs' element={<FAQs/>}/>
+        <Route path='/publicprofile/:userId' element={<PublicProfilePage/>}/>
       </Routes>
     </BrowserRouter>
   )
