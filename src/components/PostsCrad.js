@@ -25,14 +25,14 @@ export default function PostsCard({ PostData }) {
     setConnect(!clickedconnect)
     const recipient=PostData._id;
 
-    await axios.post(`http://localhost:5000/request`,{requester,recipient,status:"pending"})
+    await axios.post(`https://backend-diwr.onrender.com/request`,{requester,recipient,status:"pending"})
   }
   const handelPending= async()=>{
     const requester=localStorage.getItem('Id');
     setConnect(!clickedconnect)
     const recipient=PostData._id;
 
-    await axios.post(`http://localhost:5000//request`,{requester,recipient,status:"cancelled"})
+    await axios.post(`https://backend-diwr.onrender.com/request`,{requester,recipient,status:"cancelled"})
   }
   const avatarColor = getColorFromString(PostData.userName);
   return (
