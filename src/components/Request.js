@@ -14,7 +14,7 @@ export default function Request({ data }) {
     try {
       const recipient = localStorage.getItem('Id');
       const requester = data._id;
-      await axios.post('http://localhost:5000/request', {
+      await axios.post('https://backend-diwr.onrender.com/request', {
         recipient,
         requester,
         status: "accepted",
@@ -29,7 +29,7 @@ export default function Request({ data }) {
     try {
       const recipient = localStorage.getItem('Id');
       const requester = data._id;
-      const res = await axios.post('http://localhost:5000/request', {
+      const res = await axios.post('https://backend-diwr.onrender.com/request', {
         recipient,
         requester,
         status: "rejected",

@@ -13,7 +13,8 @@ const navigate=useNavigate()
         const response = await axios.post(`http://localhost:5000/user/login-google`, { token });
         console.log("Login Response:", response.data);
         localStorage.setItem('token',response.data.token)
-        localStorage.setItem('Id',response._id)
+        localStorage.setItem('Id',response.data._id)
+        localStorage.setItem('name',response.data.userName)
         if(response){
           navigate('/home')
 
@@ -24,10 +25,11 @@ const navigate=useNavigate()
     };
 const handelLogin=async()=>{
   try {
-    const response = await axios.post(`http://localhost:5000/user/login-details`, { MobileNumber,password });
+    const response = await axios.post(`https://backend-diwr.onrender.com/user/login-details`, { MobileNumber,password });
     console.log("Login Response:", response.data);
     localStorage.setItem('token',response.data.token)
     localStorage.setItem('Id',response.data._id)
+    localStorage.setItem('name',response.data.userName)
 
     if(response){
       navigate('/home')

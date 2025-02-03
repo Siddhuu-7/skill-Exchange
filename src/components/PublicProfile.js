@@ -13,7 +13,7 @@ const PublicProfileView = () => {
     const fetchProfileData = async () => {
      
       try {
-        const response = await fetch(`http://localhost:5000/user/profileData/${userId}`);
+        const response = await fetch(`https://backend-diwr.onrender.com/user/profileData/${userId}`);
         if (!response.ok) {
           throw new Error('Profile not found');
         }

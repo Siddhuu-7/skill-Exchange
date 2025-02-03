@@ -20,7 +20,7 @@ const ProfilePage = () => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:5000/user/profileData/${id}`);
+        const response = await axios.get(`https://backend-diwr.onrender.com/user/profileData/${id}`);
         setProfileData(response.data);
       } catch (err) {
         setError("Failed to fetch profile data. Please try again later.");

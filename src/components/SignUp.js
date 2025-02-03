@@ -27,7 +27,7 @@ const [confirmPassword,setConfirmPassword]=useState('')
       alert("Passwords do not match");
       return;
     }
-    axios.post('http://localhost:5000/user/signup',formData)
+    axios.post('https://backend-diwr.onrender.com/user/signup',formData)
     .then(res=>{
       if(res){
         navigate('/login')

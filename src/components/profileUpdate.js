@@ -80,7 +80,7 @@ export default function ProfileUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id = localStorage.getItem('Id');
-     await axios.post('http://localhost:5000/user/profileDataUpdate', { id, profile });
+     await axios.post('https://backend-diwr.onrender.com/user/profileDataUpdate', { id, profile });
     setShowSuccess(!showSuccess);
   };
 
@@ -88,7 +88,7 @@ export default function ProfileUpdate() {
     const fetchData = async () => {
       const id = localStorage.getItem('Id');
       try {
-        const res = await axios.get(`http://localhost:5000/user/profileData/${id}`);
+        const res = await axios.get(`https://backend-diwr.onrender.com/user/profileData/${id}`);
         const data = res.data;
 
         setProfile({

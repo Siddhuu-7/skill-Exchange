@@ -10,7 +10,7 @@ const debounce = (func, delay) => {
   };
 };
 
-export default function SearchBar() {
+export default function SearchBar({handelSearch}) {
   const [searchContent, setSearchContent] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -36,7 +36,7 @@ export default function SearchBar() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(searchContent);
+          handelSearch(searchContent)
         }}
       >
         <div className="d-flex align-items-center">
