@@ -25,7 +25,7 @@ const Todo = ({ handelCard, assignedTo, data }) => {
     };
 
     try {
-      await axios.post('http://localhost:5000/goals/post', {
+      await axios.post('https://backend-diwr.onrender.com/goals/post', {
         assignedBy,
         assignedTo,
         assignedGoal: { goals: task, complete: "pending" }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import PostsCard from './PostsCrad';
-import FooterNavbar from './Fotter';
+
 import axios from 'axios';
 import SearchBar from './searchbar';
 import Skeleton from 'react-loading-skeleton';
@@ -18,7 +18,7 @@ export default function DashBoard() {
   const handleFetchAllData = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('https://backend-diwr.onrender.com/user/get-all-data');
+      const response = await axios.get('https://backend-diwr.onrender.com/user/get-all-data/'+localStorage.getItem('Id'));
       const mergedData = response.data;
       setPostData(mergedData);
     } catch (error) {
@@ -60,7 +60,6 @@ export default function DashBoard() {
   }, []);
 
   const dataToDisplay = searchedData || PostData;
-
   
 
   return (
@@ -114,7 +113,7 @@ export default function DashBoard() {
         )}
       </div>
 
-      <FooterNavbar />
+    
     </div>
   );
 }

@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { Blend } from 'lucide-react';
-import React, { useState } from 'react';
+import { Check } from 'lucide-react';
+import React, { use, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 export default function PostsCard({ PostData }) {
   const navigate = useNavigate();
   const [clickedconnect,setConnect]=useState(false)
-  
   const firstLetter = PostData.userName.charAt(0).toUpperCase();
   const getColorFromString = (str) => {
     const colors = [
@@ -101,24 +100,36 @@ export default function PostsCard({ PostData }) {
         </div>
 
         <div className="d-flex gap-2 mt-auto pt-3">
-          {
-            clickedconnect?<button className="btn  flex-grow-1 d-flex align-items-center justify-content-center gap-2"
-            style={{backgroundColor:clickedconnect?"black":"#1e90ff", color:"white"}}
-            onClick={()=>{
-              handelPending();
-            }}
-            >
-              <i className="bi bi-chat"></i>
-              pending
-            </button>:<button className="btn  flex-grow-1 d-flex align-items-center justify-content-center gap-2"
-          style={{backgroundColor:clickedconnect?"black":"#1e90ff", color:"white"}}
-          onClick={handelConnect}
-          >
-            <i className="bi bi-chat"></i>
-            connect
+        {
+  PostData.status === "connected" ? (
+    <button 
+      className="btn flex-grow-1 d-flex align-items-center justify-content-center gap-2"
+      style={{ backgroundColor: "black", color: "white" }}
+    >
+      
+      Connected <Check/>
+    </button>
+  ) : clickedconnect ? (
+    <button 
+      className="btn flex-grow-1 d-flex align-items-center justify-content-center gap-2"
+      style={{ backgroundColor: "black", color: "white" }}
+      onClick={handelPending}
+    >
+      <i className="bi bi-chat"></i>
+      Pending
+    </button>
+  ) : (
+    <button 
+      className="btn flex-grow-1 d-flex align-items-center justify-content-center gap-2"
+      style={{ backgroundColor: "#1e90ff", color: "white" }}
+      onClick={handelConnect}
+    >
+      <i className="bi bi-chat"></i>
+      Connect
+    </button>
+  )
+}
 
-          </button>
-          }
           <button
             onClick={() => navigate(`/publicprofile/${PostData._id}`)}
             className="btn btn-outline-primary flex-grow-1"

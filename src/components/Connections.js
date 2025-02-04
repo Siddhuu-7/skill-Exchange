@@ -24,27 +24,27 @@ const handelHelp=async()=>{
    }
 }
 
-    const removeConnection =async () => {
-        try {
-            const recipient = localStorage.getItem('Id');
-            const requester = connection._id;
+    // const removeConnection =async () => {
+    //     try {
+    //         const recipient = localStorage.getItem('Id');
+    //         const requester = connection._id;
             
-            const res = await axios.post('https://backend-diwr.onrender.com/request', {
-              recipient,
-              requester,
+    //         const res = await axios.post('https://backend-diwr.onrender.com/request', {
+    //           recipient,
+    //           requester,
               
-              status: "rejected",
-            });
+    //           status: "rejected",
+    //         });
       
-            if (res.data) {
-              console.log("Request declined. Updating status.",res.data);
+    //         if (res.data) {
+    //           console.log("Request declined. Updating status.",res.data);
              
-            }
-          } catch (error) {
-            console.log(error);
-          }
+    //         }
+    //       } catch (error) {
+    //         console.log(error);
+    //       }
         
-    };
+    // };
 
     return (
         <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -80,9 +80,7 @@ const handelHelp=async()=>{
                                 {/* New Buttons */}
                                 <div className="d-flex justify-content-between mt-3">
                                     
-                                    <Button variant="danger" onClick={removeConnection}>
-                                        Remove <FaTrash />
-                                    </Button>
+                                    
                                     <Button className='bg-success'
                                     onClick={handelHelp}>
                                         Help

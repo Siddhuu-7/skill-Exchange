@@ -6,7 +6,6 @@ import axios from 'axios';
 const Progress = () => {
   const [progressData, setProgressData] = useState([]);
 
- 
   const fetchAssignedTasks = async () => {
     try {
       const id = localStorage.getItem('Id');
@@ -14,7 +13,6 @@ const Progress = () => {
 
       const res = await axios.get(`https://backend-diwr.onrender.com/fetch/goals/${id}`);
 
-      
       const formattedData = res.data.map((item) => ({
         assignedBy: item.assignedBy.name,
         assignedTo: item.assignedTo,
@@ -32,10 +30,17 @@ const Progress = () => {
   };
 
   useEffect(() => {
-    fetchAssignedTasks();
+    fetchAssignedTasks(); // Initial fetch
+
+    // Polling every 5 seconds
+    const interval = setInterval(() => {
+      fetchAssignedTasks();
+    }, 5000);
+
+    // Cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
 
-  // Function to update task status in the backend
   const toggleTaskStatus = async (assignedTo, taskId) => {
     try {
       const res = await axios.put(`https://backend-diwr.onrender.com/update/goal`, {
@@ -44,21 +49,7 @@ const Progress = () => {
       });
 
       if (res.status === 200) {
-        // Update UI after a successful request
-        setProgressData((prevData) =>
-          prevData.map((person) =>
-            person.assignedTo === assignedTo
-              ? {
-                  ...person,
-                  tasks: person.tasks.map((task) =>
-                    task._id === taskId
-                      ? { ...task, status: "completed" }
-                      : task
-                  ),
-                }
-              : person
-          )
-        );
+        fetchAssignedTasks(); // Re-fetch after updating
       }
     } catch (error) {
       console.error("Error updating task status:", error);

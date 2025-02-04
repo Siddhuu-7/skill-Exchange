@@ -106,11 +106,11 @@ export default function Seekers({ data }) {
                                     </div>
                                 </div>
 
-                                <ul className="list-group">
+                                {checkComplete &&   <ul className="list-group">
                                     <li className="list-group-item list-group-item-success font-italic text-capitalize">
-                                        {checkComplete && "Great job, both of you are doing amazing work!"}
+                                        "Great job, both of you are doing amazing work!"
                                     </li>
-                                </ul>
+                                </ul>}
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <Button variant="primary" onClick={() => setShowTODO(true)}>
