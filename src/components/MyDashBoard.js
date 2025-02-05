@@ -38,6 +38,9 @@ const navigate=useNavigate()
       const [connectionsRes, seekingRes, seekersRes, requestsRes] = await Promise.allSettled(
         apiUrls.map(url => axios.get(url))
       );
+      
+      
+      
 
       if (connectionsRes.status === "fulfilled") setConnection(connectionsRes.value.data || []);
       if (seekingRes.status === "fulfilled") setSeeking(seekingRes.value.data || []);
@@ -52,10 +55,11 @@ const navigate=useNavigate()
 
   useEffect(() => {
     fetchData(); 
-    const interval = setInterval(fetchData, 5000); 
-
+    const interval = setInterval(fetchData, 2000); 
+  
     return () => clearInterval(interval); 
-  }, []);
+  }, [activeSection]);  
+  
 
   return (
     <div>

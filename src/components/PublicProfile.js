@@ -2,13 +2,51 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaMapMarkerAlt, FaEnvelope, FaBriefcase, FaGraduationCap, FaLinkedin, FaGithub } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import {ArrowLeft} from 'lucide-react'
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from 'react-router-dom';
+const ProfileSkeleton = () => (
+  <div className="container py-3">
+    <div className="d-flex align-items-center mb-3">
+      <Skeleton width={30} height={30} />
+      <Skeleton width={150} height={25} className="ms-2" />
+    </div>
+    <div className="row justify-content-center">
+      <div className="col-lg-10">
+        <div className="card shadow-sm">
+          <div className="card-header text-center  text-white">
+            <Skeleton circle height={120} width={120} className="mb-3" />
+            <Skeleton width={180} height={25} />
+            <Skeleton width={220} height={18} />
+          </div>
+          <div className="card-body">
+            <div className="row mb-4">
+              <div className="col-md-6">
+                <Skeleton width={220} height={20} />
+              </div>
+              <div className="col-md-6">
+                <Skeleton width={220} height={20} />
+              </div>
+            </div>
+            <h4><Skeleton width={180} height={25} /></h4>
+            <Skeleton width={"100%"} height={60} />
+            <h4><Skeleton width={180} height={25} /></h4>
+            <Skeleton width={"100%"} height={80} />
+            <h4><Skeleton width={180} height={25} /></h4>
+            <Skeleton width={"100%"} height={40} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 const PublicProfileView = () => {
   const { userId } = useParams();
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+const navigate=useNavigate()
   useEffect(() => {
     const fetchProfileData = async () => {
      
@@ -31,14 +69,7 @@ const PublicProfileView = () => {
 
   if (loading) {
     return (
-      <div className="container py-5">
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <p className="mt-3">Loading profile...</p>
-        </div>
-      </div>
+      <ProfileSkeleton/>
     );
   }
 
@@ -54,10 +85,14 @@ const PublicProfileView = () => {
   }
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
+    <div className="container py-3" style={{ overflowY: "auto", maxHeight: "100vh" }}>
+<div className="d-flex align-items-center mb-3">
+        <p className="m-0 fs-3">
+          <ArrowLeft size={24} onClick={() => navigate(-1)} /> User Profile
+        </p>
+      </div>      <div className="row justify-content-center">
+        
         <div className="col-lg-8">
-          {/* Profile Header Card */}
           <div className="card shadow mb-4">
             <div className="card-body text-center">
               <img
@@ -69,7 +104,6 @@ const PublicProfileView = () => {
               <h2 className="mb-0">{profileData?.userName || 'Anonymous User'}</h2>
               <p className="text-muted mb-3">{profileData?.professionalCategory || 'Professional'}</p>
               
-              {/* Location and Contact */}
               <div className="d-flex justify-content-center gap-3 mb-3">
                 {profileData?.location && (
                   <span className="text-muted">
@@ -78,7 +112,6 @@ const PublicProfileView = () => {
                 )}
               </div>
 
-              {/* Social Links */}
               <div className="d-flex justify-content-center gap-3">
                 {profileData?.linkedinUrl && (
                   <a href={profileData.linkedinUrl} className="text-primary" target="_blank" rel="noopener noreferrer">
@@ -94,7 +127,6 @@ const PublicProfileView = () => {
             </div>
           </div>
 
-          {/* About Section */}
           <div className="card shadow mb-4">
             <div className="card-body">
               <h4 className="card-title border-bottom pb-3">About</h4>
@@ -102,7 +134,6 @@ const PublicProfileView = () => {
             </div>
           </div>
 
-          {/* Experience Section */}
           <div className="card shadow mb-4">
             <div className="card-body">
               <h4 className="card-title border-bottom pb-3">
@@ -125,7 +156,6 @@ const PublicProfileView = () => {
             </div>
           </div>
 
-          {/* Skills Section */}
           <div className="card shadow">
             <div className="card-body">
               <h4 className="card-title border-bottom pb-3">Skills</h4>
