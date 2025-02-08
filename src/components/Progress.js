@@ -30,14 +30,12 @@ const Progress = () => {
   };
 
   useEffect(() => {
-    fetchAssignedTasks(); // Initial fetch
+    fetchAssignedTasks(); 
 
-    // Polling every 5 seconds
     const interval = setInterval(() => {
       fetchAssignedTasks();
     }, 5000);
 
-    // Cleanup on unmount
     return () => clearInterval(interval);
   }, []);
 
@@ -49,7 +47,7 @@ const Progress = () => {
       });
 
       if (res.status === 200) {
-        fetchAssignedTasks(); // Re-fetch after updating
+        fetchAssignedTasks(); 
       }
     } catch (error) {
       console.error("Error updating task status:", error);
@@ -73,7 +71,7 @@ const Progress = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <span className="text-truncate w-75">{task.task}</span>
+                <span className=" w-75">{task.task}</span>
                 <button
                   className={`btn btn-sm ${task.status === 'completed' ? 'btn-success' : 'btn-warning'}`}
                   onClick={() => toggleTaskStatus(person.assignedTo, task._id)}

@@ -54,14 +54,14 @@ export default function SearchBar({handelSearch}) {
               onChange={(e) => handleSearchChange(e.target.value)}
             />
           </div>
-          <button
+          {/* <button
             type="button"
             className={`btn ms-2 ${showFilters ? "btn-primary" : "btn-outline-secondary"}`}
             onClick={() => setShowFilters(!showFilters)}
             aria-label="Toggle filters"
           >
             <Filter size={20} />
-          </button>
+          </button> */}
         </div>
       </form>
 

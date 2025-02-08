@@ -94,7 +94,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="container py-3" style={{ overflowY: "auto", maxHeight: "100vh" }}>
+    <div className="container py-3" >
       <div className="d-flex align-items-center mb-3">
         <p className="m-0 fs-3">
           <ArrowLeft size={24} onClick={() => navigate(-1)} /> Profile

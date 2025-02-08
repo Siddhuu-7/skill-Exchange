@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import PostsCard from './PostsCrad';
 import axios from 'axios';
-import SearchBar from './searchbar';
 import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
 import nodataFound from '../assests/nosearchFound.png'
@@ -50,12 +49,10 @@ export default function DashBoard() {
   return (
     <div>
       <div className="fixed-top" style={{ zIndex: 1030 }}>
-        <Navbar />
+        <Navbar handelSearch={handelSearch}/>
       </div>
 
-      <div className="fixed-top" style={{ top: '70px', zIndex: 1020, padding: '10px 20px' }}>
-        <SearchBar handelSearch={handelSearch} />
-      </div>
+      
 
       <div className="container" style={{ maxWidth: '1200px', marginTop: '160px', padding: '20px' }}>
  <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">

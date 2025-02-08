@@ -4,6 +4,7 @@ import { FaEye, FaTasks, FaTrash } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { MessageCircleMoreIcon } from 'lucide-react';
 export default function Connections({ connection }) {
     
     const navigate = useNavigate();
@@ -79,13 +80,13 @@ const handelHelp=async()=>{
 
                                 {/* New Buttons */}
                                 <div className="d-flex justify-content-between mt-3">
-                                    
-                                    
                                     <Button className='bg-success'
                                     onClick={handelHelp}>
                                         Help
                                     </Button>
+                                    <MessageCircleMoreIcon onClick={()=>navigate('/message')}/>
                                 </div>
+                                
                             </Card.Body>
                         </>
                     ) : (

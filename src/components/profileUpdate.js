@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
 import Done from './Done';
-
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 export default function ProfileUpdate() {
   const [profile, setProfile] = useState({
     userName: '',
@@ -18,7 +19,7 @@ export default function ProfileUpdate() {
     title: '',
   });
   const [newSkill, setNewSkill] = useState('');
-
+const Navigate=useNavigate();
   const professionalCategories = [
     'Student',
     'Employee',
@@ -109,8 +110,12 @@ export default function ProfileUpdate() {
   }, []);
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
+    <div className="container py-3">
+ <div className="d-flex align-items-center mb-3">
+        <p className="m-0 fs-5">
+          <ArrowLeft size={24} onClick={() => Navigate(-1)} /> Back To Profile 
+        </p>
+      </div>      <div className="row justify-content-center">
         <div className="col-lg-10">
           <div className="card shadow-sm">
             <div className="card-header bg-primary text-white">
