@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, MessageCircle, Bookmark, MoreHorizontal, Send } from 'lucide-react';
 import './App.css';
-
+import unknown from '../assests/unknown.jpg'
 const InstagramPosts = ({ post }) => {
   const [liked, setLiked] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
@@ -22,12 +22,12 @@ const InstagramPosts = ({ post }) => {
   };
 
   return (
-    <div className="container my-4">
-      <div key={post.id} className="card mb-4">
+    <div className="container my-1" >
+      <div key={post.id} className="card mb-2">
         <div className="card-header d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
             <img
-              src={post.userAvatar}
+              src={post.userAvatar?post.userAvatar:unknown}
               alt={post.username}
               className="rounded-circle me-2"
               width="40"

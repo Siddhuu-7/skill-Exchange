@@ -15,6 +15,7 @@ import Posts from './components/Posts';
 import ProfileUpdate from './components/profileUpdate';
 import FAQs from './components/Faqs';
 import PublicProfilePage from './components/PublicProfile';
+import CreatePost from './components/createPost'
 export default function App() {
 
   const [initial,setIntial]=useState(false)
@@ -46,6 +47,7 @@ useEffect(()=>{
         <Route path='/profileupdate' element={<ProfileUpdate/>}/>
         <Route path='/faqs' element={<FAQs/>}/>
         <Route path='/publicprofile/:userId' element={<PublicProfilePage/>}/>
+        <Route path='/createpost' element={<CreatePost/>}/>
       </Routes>
     </BrowserRouter>
   )
