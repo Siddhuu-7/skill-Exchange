@@ -1,76 +1,33 @@
-[
+const posts = [
   {
-    "userName": "Siddhardha utla",
-    "MobileNumber": "6301006871",
-    "email": "siddhardhautlay19@gmail.com",
-    "password": "$2b$10$TMaT9yTd5rtG7w7FPA3Ksu2gwggqDcxMevhfNwnvQmfF6CnEGifm.",
-    "professionalCategory": "Teacher/Educator",
-    "location": "Bhimavarm",
-    "summary": "A highly motivated and passionate developer with a strong foundation in JavaScript, React, Node.js, committed to building innovative and efficient solutions. Possesses a keen eye for detail, a growth mindset, and the ability to adapt quickly to new challenges.",
-    "skills": [
-      "Mern",
-      "C",
-      "HTML",
-      "Java"
-    ],
-    "experience": [
-      {
-        "company": "Tech Innovators Inc.",
-        "title": "Software Engineer",
-        
-      }
-    ],
-    "__v": 0
+    id: 1,
+    username: 'traveler_jane',
+    userAvatar: '/api/placeholder/40/40',
+    image: 'https://tse4.mm.bing.net/th?id=OIP.8ANqbSwwSNzpWWmx1Ru0FQHaEK&pid=Api&P=0&h=180',
+    likes: 1234,
+    caption: 'Beautiful sunset at the beach! 🌅 #travel #sunset #vibes',
+    comments: 48,
+    timeAgo: '2 hours ago'
   },
   {
-    "userName": "John Doe",
-    "MobileNumber": "9876543210",
-    "email": "john.doe@example.com",
-    "password": "$2b$10$kLh0M5HsGsHxKFd5A3TxVgNxYrKq8YxVmTcOVhNr5yQdFzY/M1q8i",
-    "professionalCategory": "Developer",
-    "location": "New York",
-    "summary": "Experienced software developer with expertise in full-stack development, specializing in JavaScript, React, Node.js, and MongoDB.",
-    "skills": [
-      "JavaScript",
-      "React",
-      "Node.js",
-      "MongoDB"
-    ],
-    "experience": [
-      {
-        "company": "Tech Solutions Ltd.",
-        "title": "Frontend Developer",
-       
-      },
-      {
-        "company": "Web Tech Inc.",
-        "title": "Backend Developer",
-       
-      }
-    ],
-    "__v": 0
+    id: 2,
+    username: 'foodie_adventures',
+    userAvatar: '/api/placeholder/40/40',
+    image: 'https://tse3.mm.bing.net/th?id=OIP.FEqv7YYMNjXtrVYqo7HHzAHaE7&pid=Api&P=0&h=180',
+    likes: 892,
+    caption: 'Best pasta in town! 🍝 #foodie #italian #yummy',
+    comments: 32,
+    timeAgo: '4 hours ago'
   },
   {
-    "userName": "Alice Smith",
-    "MobileNumber": "1234567890",
-    "email": "alice.smith@example.com",
-    "password": "$2b$10$JjDtNs4vWpWgE7S9PB5VZiA9hV8X5x.R8kkc8k95h/Zt6n9fg17fG",
-    "professionalCategory": "Designer",
-    "location": "Los Angeles",
-    "summary": "Creative designer with a passion for UI/UX and a solid understanding of web development. Skilled in Photoshop, Illustrator, and Figma.",
-    "skills": [
-      "UI/UX Design",
-      "Photoshop",
-      "Illustrator",
-      "Figma"
-    ],
-    "experience": [
-      {
-        "company": "Creative Designs Co.",
-        "title": "Senior Designer",
-        
-      }
-    ],
-    "__v": 0
+    id: 3,
+    username: 'fitness_pro',
+    userAvatar: '/api/placeholder/40/40',
+    image: 'https://tse3.mm.bing.net/th?id=OIP.FEqv7YYMNjXtrVYqo7HHzAHaE7&pid=Api&P=0&h=180',
+    likes: 2456,
+    caption: 'Morning workout complete! 💪 #fitness #motivation #healthy',
+    comments: 89,
+    timeAgo: '6 hours ago'
   }
-]
+];
+module.exports=posts

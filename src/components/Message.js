@@ -1,60 +1,71 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, InputGroup, Badge } from 'react-bootstrap';
 import { Camera, Phone, Video, Image, Send, MoreVertical } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import axios from 'axios';
+const socket = io('http://localhost:5000'); 
 
 const ChatUI = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: 'Mark Hendry',
-      content: 'Hi there! How can I assist you today?',
-      timestamp: '10:00 AM',
-      isOwn: false
-    },
-    {
-      id: 2,
-      sender: 'Me',
-      content: 'I have a question about my delivery.',
-      timestamp: '10:02 AM',
-      isOwn: true
-    }
-  ]);
-
+  const { id ,userName} = useParams(); 
+  const senderId = localStorage.getItem('Id'); 
+  const [msg,setmsg]=useState()
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [showMenu, setShowMenu] = useState(false);
-  const menuRef = useRef(null);
-  const inputRef = useRef(null); 
+  const inputRef = useRef(null);
 
+  useEffect(() => {
+    if (senderId && id) {
+      socket.emit("joinChat", { senderId, receiverId: id });
+    }
+  }, [senderId, id]);
+  const isOwn = (messageSenderId) => {
+    return messageSenderId === senderId;
+  };
+  useEffect(() => {
+    socket.on("receiveMessage", (msg) => {
+      setMessages((prevMessages) => {
+        if (!prevMessages.some((message) => message._id === msg._id)) {
+          setmsg(msg.senderId)
+          return [...prevMessages, { ...msg}];
+        }
+        return prevMessages;
+      });
+    });
+  
+    return () => socket.off("receiveMessage");
+  }, [senderId]);
+  
+useEffect(()=>{
+  const fetchMessages=async()=>{
+try {
+  const res=await axios.get(`http://localhost:5000/get/messages?senderId=${localStorage.getItem('Id')}&receiverId=${id}`)
+if(res.data){
+  setMessages(res.data)
+}
+} catch (error) {
+  console.log(error)
+}
+  }
+  fetchMessages();
+},[])
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (newMessage.trim()) {
-      const message = {
-        id: messages.length + 1,
-        sender: 'Me',
-        content: newMessage,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isOwn: true
+      const messageData = {
+        senderId,
+        receiverId: id,
+        message: newMessage,
       };
-      setMessages([...messages, message]);
+      socket.emit("sendMessage", messageData);
+  
+      setMessages((prevMessages) => [
+        ...prevMessages,
+      ]);
       setNewMessage('');
     }
   };
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [newMessage]);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowMenu(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  
 
   return (
     <div className="vh-100 d-flex flex-column" style={{ background: '#f8f9fa' }}>
@@ -76,53 +87,64 @@ const ChatUI = () => {
                 />
               </div>
               <div className="ms-3">
-                <h6 className="mb-0 fw-bold">Mark Hendry</h6>
+                <h6 className="mb-0 fw-bold">{userName}</h6>
                 <small className="text-muted">Online</small>
               </div>
             </div>
-            <div className="d-flex gap-2">
-              <Button variant="light" className="d-flex align-items-center">
-                <Phone size={20} className="me-2" /> Call
+
+            <div className="d-flex">
+              <Button variant="link" className="p-0">
+                <Phone size={20} />
               </Button>
-              <Button variant="light" className="d-flex align-items-center">
-                <Video size={20} className="me-2" /> Video
+              <Button variant="link" className="p-0 ms-3">
+                <Video size={20} />
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex-grow-1 overflow-auto px-3 py-4" >
-        <div className="fluid-container px-3" style={{  paddingTop: '100px', paddingBottom: '60px' }}>
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`d-flex mb-4 ${message.isOwn ? 'justify-content-end' : 'justify-content-start'}`}
-            >
-              {!message.isOwn && (
-                <img
-                  src="https://tse1.mm.bing.net/th?id=OIP.oRg5_S8cDQuMcs_nkK8ZwAAAAA&pid=Api&P=0&h=180"
-                  alt="User Avatar"
-                  className="rounded-circle me-2 align-self-end"
-                  style={{ width: '36px', height: '36px' }}
-                />
-              )}
-              <div
-                className={`p-3 ${message.isOwn ? 'bg-primary text-white' : 'bg-white'}`}
-                style={{
-                  borderRadius: '18px',
-                  maxWidth: '75%',
-                  position: 'relative',
-                  borderBottomLeftRadius: !message.isOwn ? '4px' : '18px',
-                  borderBottomRightRadius: message.isOwn ? '4px' : '18px',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                }}
-              >
-                <p className="mb-1">{message.content}</p>
-                <small className={`${message.isOwn ? 'text-light' : 'text-muted'}`}>{message.timestamp}</small>
-              </div>
-            </div>
-          ))}
+      <div className="flex-grow-1 overflow-auto px-3 py-4">
+        <div className="fluid-container px-3" style={{ paddingTop: '100px', paddingBottom: '60px' }}>
+        {messages.map((message, index) => (
+  <div
+    key={index}
+    className={`d-flex mb-4 ${isOwn(message.senderId) ? 'justify-content-end' : 'justify-content-start'}`}
+  >
+    {!isOwn(message.senderId) && (
+      <img
+        src="https://tse1.mm.bing.net/th?id=OIP.oRg5_S8cDQuMcs_nkK8ZwAAAAA&pid=Api&P=0&h=180"
+        alt="User Avatar"
+        className="rounded-circle me-2 align-self-end"
+        style={{ width: '36px', height: '36px' }}
+      />
+    )}
+    <div
+      className={`p-3 ${isOwn(message.senderId) ? 'bg-primary text-white' : 'bg-light'}`}
+      style={{
+        borderRadius: '18px',
+        maxWidth: '75%',
+        position: 'relative',
+        borderBottomLeftRadius: isOwn(message.senderId) ? '4px' : '18px',
+        borderBottomRightRadius: isOwn(message.senderId) ? '18px' : '4px',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+      }}
+    >
+      <p className="mb-1">{message.message}</p>
+      <small className={`${isOwn(message.senderId) ? 'text-light' : 'text-muted'}`}>
+        {new Date(message.timestamp).toLocaleString("en-GB", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}
+      </small>
+    </div>
+  </div>
+))}
+
         </div>
       </div>
 
@@ -130,36 +152,6 @@ const ChatUI = () => {
         <div className="container-fluid p-3">
           <Form onSubmit={handleSendMessage}>
             <InputGroup className="shadow-sm">
-              <div className="position-relative" ref={menuRef}>
-                <Button
-                  variant="light"
-                  className="border-end-0"
-                  onClick={() => setShowMenu((prev) => !prev)}
-                >
-                  <MoreVertical size={20} />
-                </Button>
-                {showMenu && (
-                  <div
-                    className="position-absolute bg-white shadow rounded"
-                    style={{
-                      bottom: '100%',
-                      left: '0',
-                      marginBottom: '8px',
-                      zIndex: 10,
-                      minWidth: '200px'
-                    }}
-                  >
-                    <div className="p-2">
-                      <Button variant="light" className="d-flex align-items-center w-100 mb-2">
-                        <Camera size={20} className="me-2" /> Take Photo
-                      </Button>
-                      <Button variant="light" className="d-flex align-items-center w-100 mb-2">
-                        <Image size={20} className="me-2" /> Send Image
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
               <Form.Control
                 ref={inputRef}
                 placeholder="Type your message..."

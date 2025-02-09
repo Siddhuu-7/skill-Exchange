@@ -84,7 +84,7 @@ const handelHelp=async()=>{
                                     onClick={handelHelp}>
                                         Help
                                     </Button>
-                                    <MessageCircleMoreIcon onClick={()=>navigate('/message')}/>
+                                    <MessageCircleMoreIcon onClick={()=>navigate(`/message/${connection._id}/${connection.userName}`)}/>
                                 </div>
                                 
                             </Card.Body>

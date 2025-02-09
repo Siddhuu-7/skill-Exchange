@@ -39,7 +39,7 @@ useEffect(()=>{
         <Route path='/signup'  element={<SignupPage/>}/>
         <Route path='/home'element={<DashBoard/>}/>
         <Route path='/profile' element={<Profile/>}/>
-        <Route path='/message' element={<Message/>}/>
+        <Route path='/message/:id/:userName' element={<Message/>}/>
         <Route path='/request' element={<Request/>}/>
         <Route path='/mydashboard' element={<MyDashBoard/>}/>
         <Route path='/posts' element={<Posts/>}/>
